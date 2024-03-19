@@ -151,8 +151,12 @@ function formatDate(date) {
  * 12, 2023 => 10
  * 1, 2024 => 8
  */
-function getCountWeekendsInMonth(/* month, year */) {
-  throw new Error('Not implemented');
+function getCountWeekendsInMonth(month, year) {
+  const daysOver28 = new Date(year, month, 0).getDate() - 28 - 1;
+  const firstDay = new Date(year, month - 1, 1).getDay() || 7;
+  const saturdays = firstDay <= 6 && firstDay + daysOver28 >= 6 ? 5 : 4;
+  const sundays = firstDay <= 7 && firstDay + daysOver28 >= 7 ? 5 : 4;
+  return saturdays + sundays;
 }
 
 /**
@@ -168,8 +172,11 @@ function getCountWeekendsInMonth(/* month, year */) {
  * Date(2024, 0, 31) => 5
  * Date(2024, 1, 23) => 8
  */
-function getWeekNumberByDate(/* date */) {
-  throw new Error('Not implemented');
+function getWeekNumberByDate(date) {
+  const firstDay = new Date(date.getFullYear(), 0, 0);
+  return Math.ceil(
+    ((date - firstDay) / (24 * 60 * 60 * 1000) + firstDay.getDay()) / 7
+  );
 }
 
 /**
@@ -183,8 +190,15 @@ function getWeekNumberByDate(/* date */) {
  * Date(2024, 0, 13) => Date(2024, 8, 13)
  * Date(2023, 1, 1) => Date(2023, 9, 13)
  */
-function getNextFridayThe13th(/* date */) {
-  throw new Error('Not implemented');
+function getNextFridayThe13th(date) {
+  const result =
+    date.getDate() <= 13
+      ? new Date(date.getFullYear(), date.getMonth(), 13)
+      : new Date(date.getFullYear(), date.getMonth() + 1, 13);
+  while (result.getDay() !== 5) {
+    result.setMonth(result.getMonth() + 1);
+  }
+  return result;
 }
 
 /**
@@ -198,8 +212,8 @@ function getNextFridayThe13th(/* date */) {
  * Date(2024, 5, 1) => 2
  * Date(2024, 10, 10) => 4
  */
-function getQuarter(/* date */) {
-  throw new Error('Not implemented');
+function getQuarter(date) {
+  return Math.ceil((date.getMonth() + 1) / 3);
 }
 
 /**
@@ -236,8 +250,8 @@ function getWorkSchedule(/* period, countWorkDays, countOffDays */) {
  * Date(2022, 2, 1) => false
  * Date(2020, 2, 1) => true
  */
-function isLeapYear(/* date */) {
-  throw new Error('Not implemented');
+function isLeapYear(date) {
+  return new Date(date.getFullYear(), 1, 29).getMonth() === 1;
 }
 
 module.exports = {
