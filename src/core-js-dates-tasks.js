@@ -243,9 +243,7 @@ function getWorkSchedule(period, countWorkDays, countOffDays) {
     for (let j = 0; j < countWorkDays && i + j <= periodDays; j += 1) {
       const date = new Date(startDate);
       date.setDate(date.getDate() + i + j);
-      result.push(
-        `${String(date.getDate()).padStart(2, '0')}-${String(date.getMonth() + 1).padStart(2, '0')}-${date.getFullYear()}`
-      );
+      result.push(date.toLocaleDateString('ru-RU').replaceAll('.', '-'));
     }
   }
   return result;
